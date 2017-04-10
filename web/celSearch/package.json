@@ -1,0 +1,31 @@
+{
+  "name": "celsearch",
+  "version": "0.0.1",
+  "description": "Endpoints for celSearch",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/christopher18/Celsearch.git"
+  },
+  "keywords": [
+    "celsearch",
+    "text-the-web",
+    "Internet-access"
+  ],
+  "author": "Ron",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/christopher18/Celsearch/issues"
+  },
+  "homepage": "https://github.com/christopher18/Celsearch#readme",
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  },
+  "dependencies": {
+    "express": "^4.15.2"
+  }
+}

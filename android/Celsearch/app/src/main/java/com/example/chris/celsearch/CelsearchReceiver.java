@@ -37,13 +37,13 @@ public class CelsearchReceiver extends BroadcastReceiver {
                 return;
             }
             for (int i = 0; i < pdusObj.length; i++) {
-                final SmsMessage currentMessage = SmsMessage.createFromPdu((byte[]) pdusObj[i]);
+                final SmsMessage currentMessage = SmsMessage.createFromPdu((byte[]) pdusObj[i], format);
                 String message = currentMessage.getMessageBody();
                 if (message.startsWith("CS")) {
                     Log.v("TAG", "chris debug: " + message.substring(3, message.length()));
                 }
             }
-
+            this.abortBroadcast();
         }
     }
 }

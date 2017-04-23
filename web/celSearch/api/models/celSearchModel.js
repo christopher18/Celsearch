@@ -3,9 +3,13 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema; 
 
 var RequestSchema = new Schema({
-	name: {
-		type: Number, 
-		Required: 'Number of incoming request'
+	query: {
+		type: String,
+		default: ''
+	},
+	number: {
+		type: String, 
+		default: ''
 	}, 
 	subject: {
 		type: String,

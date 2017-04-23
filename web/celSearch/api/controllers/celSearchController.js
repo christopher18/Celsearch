@@ -4,28 +4,14 @@ var mongoose = require('mongoose'),
 	CelSearch = mongoose.model('CelSearch'); 
 
 // Just testing things out 
+
 exports.answerQuery = function(req, res) {
-	CelSearch.find({}, function(err, cel) {
-		if (err) 
-			res.send(err);
-		res.json({message: 'answerQuery called'});
-	});
-};
+	var options = { new: true, setDefaultsOnInsert: true }; 
 
-
-exports.addSubject = function(req, res) {
-	CelSearch.find({}, function(err, cel) {
+	// Find the document and update it otherwise create it 
+	CelSearch.findOneAndUpdate(req.params.number, req.body, options, function(err, cel) {
 		if (err) 
 			res.send(err);
 		res.json(cel);
-	});
-};
-
-
-exports.updateSubject = function(req, res) {
-	CelSearch.find({}, function(err, cel) {
-		if (err)
-			res.send(err);
-		res.json(cel); 
 	});
 };

@@ -1,5 +1,7 @@
 package com.example.chris.celsearch;
 
+import com.loopj.android.http.*;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,27 +10,18 @@ import android.provider.Telephony;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
+
 public class CelsearchReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        // debugging
         Log.v("TAG", "chris debug: We are in onReceive.");
-        /*SmsMessage[] messages = Telephony.Sms.Intents.getMessagesFromIntent(intent);
 
-        // check each message
-        for (SmsMessage message : messages) {
-
-            // get the address from which it came
-            String sender = message.getOriginatingAddress();
-
-            // get the text from the message
-            String body = message.getMessageBody();
-
-            if (body.startsWith("CS")) {
-                Log.v("TAG", "chris debug: " + body.substring(3, body.length()));
-            }
-
-            // this is used to keep the message from propogating to other broadcast receivers
-            this.abortBroadcast();*/
         final Bundle bundle = intent.getExtras();
         if (bundle != null) {
             final Object[] pdusObj = (Object[]) bundle.get("pdus");
@@ -37,13 +30,62 @@ public class CelsearchReceiver extends BroadcastReceiver {
                 return;
             }
             for (int i = 0; i < pdusObj.length; i++) {
+                // get the message object
                 final SmsMessage currentMessage = SmsMessage.createFromPdu((byte[]) pdusObj[i], format);
+
+                // extract the body of the message from the SmsMessage object
                 String message = currentMessage.getMessageBody();
+
+                // if the message starts with CS we should process it
                 if (message.startsWith("CS")) {
-                    Log.v("TAG", "chris debug: " + message.substring(3, message.length()));
+
+                    // remove the CS from the beginning of the message
+                    String query = message.substring(3, message.length());
+
+                    // get the phone number of the sender so that we can send the answer back later
+                    String phoneNumber = currentMessage.getDisplayOriginatingAddress();
+
+                    // debugging
+                    Log.v("TAG", "chris debug: " + query);
+
+                    try {
+                        // send query to REST server
+                        getQueryAnswer(query, phoneNumber);
+                    } catch (JSONException e) {
+                        Log.v("TAG", "chris debug: JSON exception occurred");
+                        e.printStackTrace();
+                    }
                 }
+
+
             }
             this.abortBroadcast();
         }
+    }
+
+    /**
+     * Receive answer from REST API
+     */
+    public void getQueryAnswer(String query, String number) throws JSONException {
+        // create parameters to send to REST server
+        RequestParams params = new RequestParams();
+        // add the query string in from the text
+        params.put("query", query);
+        // add the number of the phone that sent the text
+        params.put("number", number);
+        //TODO: fill in the address we are sending it to!
+        CelsearchRestClient.get("", params, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                // debugging
+                Log.v("TAG", "chris debug: we have a response in JSONObject onSuccess method");
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray timeline) {
+                // debugging
+                Log.v("TAG", "chris debug: we have a response in JSONArray onSuccess method");
+            }
+        });
     }
 }

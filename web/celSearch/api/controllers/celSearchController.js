@@ -8,30 +8,41 @@ var PythonShell = require('python-shell');
 
 // Just testing things out 
 
+// Leaving it nested for now because of issues with findOneAndUpdate
 exports.answerQuery = function(req, res) {
 	var options = { new: true, setDefaultsOnInsert: true }; 
 
 	// Find the document and update it otherwise create it 
 	CelSearch.findOneAndUpdate(req.params.number, req.body, options, function(err, cel) {
-		if (err) {
-			console.log('Error');
+		if (err) 
 			res.send(err);
-		}
-			
-		// Setup the options for PythonShell call
-		var options = {
-			mode: 'text',
-			scriptPath: './api/scripts',
-			args: ['Obama']
-		};
+		console.log(cel);
+		console.log('query is : ' + req.params.query); 
+		console.log('QUERY IS : ' + req.body.query); 
+		console.log('query is: ' + req.params.number); 
+		console.log('subject is : ' + req.params.subject); 
 
-		PythonShell.run('query_wikipedia.py', options, function(err, results) {
+		// Add the req in the DB if it isn't already there 
+		if (!cel) {
+			var cel = new CelSearch(req.body);
+			cel.save(function(err, cel) {
+				if (err)
+					res.send(err);
+			});
+		}
+
+		var pyOptions = {
+			scriptPath: './api/scripts',
+			args: [req.body.query]
+		}; 
+
+		PythonShell.run('query_wikipedia.py', pyOptions, function(err, result) {
 			if (err) {
-				console.log('ERror');
+				console.log('ERROR');
 				throw err;
 			}
-			console.log(results);
-		})
-		res.json(cel);
+			console.log('result is : ' + result);  
+			res.json(result); 
+		});
 	});
 };

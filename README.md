@@ -11,3 +11,15 @@ This process could be crowd sourced by downloading the app on multiple phones. T
 
 Feasability Study:
 We think that this is feasible through Android's BroadcastReceiver class.  
+
+# Requirements
+
+- You need to have node and npm installed on your machine 
+  - On macOS homebrew can be used to install node 
+    - `brew install node`
+- You will need the wikipedia package 
+  - `sudo pip install wikipedia`
+- You will need nltk 
+  - `sudo pip install -U nltk`
+  - You will also need to download the punkt and average_perceptron_tagger 
+    - Start a python shell, import nltk, and use `nltk.download()`

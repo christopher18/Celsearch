@@ -11,7 +11,7 @@ def main():
 		print 'Incorrect number of arguments; please pass in only one string that contains the subject'
 	 	return 'Banana'
 
-	print wikipedia.summary(sys.argv[1])
+	print wikipedia.summary(sys.argv[1]).encode('utf-8')
 	#return wikipedia.summary(sys.argv[1])
 
 

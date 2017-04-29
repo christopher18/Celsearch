@@ -7,9 +7,18 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import org.json.JSONException;
+
 public class MainActivity extends AppCompatActivity {
+
+    private static final int READ_SMS_PERMISSIONS_REQUEST = 1;
+
+    // edittext that will contain query
+    EditText edit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,11 +28,30 @@ public class MainActivity extends AppCompatActivity {
                 != PackageManager.PERMISSION_GRANTED) {
             getPermissionToReadSMS();
         }
+        // register the edittext
+        edit = (EditText) findViewById(R.id.edittext);
+
         // check if we are here
         Log.v("TAG", "chris debug: We are alive.");
     }
 
-    private static final int READ_SMS_PERMISSIONS_REQUEST = 1;
+    /**
+     * Sends the query to the server using CelsearchReceiver's getQuery method
+     * @param view the button that triggered this method
+     */
+    public void sendQuery(View view) {
+        Log.v("TAG", "chris debug: send query 1");
+        CelsearchReceiver receiver = new CelsearchReceiver();
+        try {
+            Log.v("TAG", "chris debug: send query 2");
+            receiver.getQueryAnswer(edit.getText().toString(), "0");
+            Log.v("TAG", "chris debug: send query 3");
+            edit.setText("");
+        } catch (JSONException e) {
+            Log.v("TAG", "chris debug: JSON exception");
+            e.printStackTrace();
+        }
+    }
 
     public void getPermissionToReadSMS() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS)

@@ -17,6 +17,7 @@ We think that this is feasible through Android's BroadcastReceiver class.
 - You need to have node and npm installed on your machine 
   - On macOS homebrew can be used to install node 
     - `brew install node`
+- Run `npm install` to install all dependencies 
 - You will need the wikipedia package 
   - `sudo pip install wikipedia`
 - You will need nltk 

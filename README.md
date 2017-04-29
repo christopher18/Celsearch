@@ -18,6 +18,8 @@ We think that this is feasible through Android's BroadcastReceiver class.
   - On macOS homebrew can be used to install node 
     - `brew install node`
 - Run `npm install` to install all dependencies 
+- You will also require mongodb 
+  - Check [installation instructions](https://docs.mongodb.com/manual/installation/)
 - You will need the wikipedia package 
   - `sudo pip install wikipedia`
 - You will need nltk 

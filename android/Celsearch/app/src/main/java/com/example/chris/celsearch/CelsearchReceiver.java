@@ -38,10 +38,10 @@ public class CelsearchReceiver extends BroadcastReceiver {
                 String message = currentMessage.getMessageBody();
 
                 // if the message starts with CS we should process it
-                if (message.startsWith("CS")) {
+                if (message.startsWith("@wiki")) {
 
                     // remove the CS from the beginning of the message
-                    String query = message.substring(3, message.length());
+                    String query = message.substring(6, message.length());
 
                     // get the phone number of the sender so that we can send the answer back later
                     String phoneNumber = currentMessage.getDisplayOriginatingAddress();

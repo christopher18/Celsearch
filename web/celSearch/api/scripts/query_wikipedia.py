@@ -13,7 +13,6 @@ def main():
 	 	return 'Banana'
 
 	# Get the noun from the query (uses the first noun it finds for now)
-	print sys.argv[0]
 	tokens = nltk.word_tokenize(sys.argv[1])
 	tagged = nltk.pos_tag(tokens)
 

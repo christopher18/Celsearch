@@ -9,18 +9,13 @@ var PythonShell = require('python-shell');
 // Just testing things out 
 
 // Leaving it nested for now because of issues with findOneAndUpdate
-exports.answerQuery = function(req, res) {
+exports.wikipediaQuery = function(req, res) {
 	var options = { new: true, setDefaultsOnInsert: true }; 
 
 	// Find the document and update it otherwise create it 
 	CelSearch.findOneAndUpdate(req.params.number, req.body, options, function(err, cel) {
 		if (err) 
 			res.send(err);
-		console.log(cel);
-		console.log('query is : ' + req.params.query); 
-		console.log('QUERY IS : ' + req.body.query); 
-		console.log('query is: ' + req.params.number); 
-		console.log('subject is : ' + req.params.subject); 
 
 		// Add the req in the DB if it isn't already there 
 		if (!cel) {
@@ -37,6 +32,40 @@ exports.answerQuery = function(req, res) {
 		}; 
 
 		PythonShell.run('query_wikipedia.py', pyOptions, function(err, result) {
+			if (err) {
+				console.log('ERROR');
+				throw err;
+			}
+			console.log('result is : ' + result);  
+			res.json(result); 
+		});
+	});
+};
+
+
+exports.mitsukuQuery = function(req, res) {
+	var options = { new: true, setDefaultsOnInsert: true }; 
+
+	// Find the document and update it otherwise create it 
+	CelSearch.findOneAndUpdate(req.params.number, req.body, options, function(err, cel) {
+		if (err) 
+			res.send(err);
+
+		// Add the req in the DB if it isn't already there 
+		if (!cel) {
+			var cel = new CelSearch(req.body);
+			cel.save(function(err, cel) {
+				if (err)
+					res.send(err);
+			});
+		}
+
+		var pyOptions = {
+			scriptPath: './api/scripts',
+			args: [req.body.query]
+		}; 
+
+		PythonShell.run('query_mitsuku.py', pyOptions, function(err, result) {
 			if (err) {
 				console.log('ERROR');
 				throw err;

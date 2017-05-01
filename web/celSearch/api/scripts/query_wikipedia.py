@@ -10,7 +10,7 @@ def main():
 	# Check that we have the right number of arguments 
 	if (len(sys.argv) != 2): 
 		print 'Incorrect number of arguments; please pass in only one string that contains the query'
-	 	return 'Banana'
+		exit()
 
 	# Get the noun from the query (uses the first noun it finds for now)
 	tokens = nltk.word_tokenize(sys.argv[1])

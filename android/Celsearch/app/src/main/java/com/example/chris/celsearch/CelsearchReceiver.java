@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
@@ -68,7 +69,7 @@ public class CelsearchReceiver extends BroadcastReceiver {
      * Send to and receive answer from REST server
      */
     public void getQueryAnswer(String query, String number) throws JSONException {
-        Log.v("TAG", "chris debug: getQueryAnswer 1");
+        final String phoneNumber = number;
         // create parameters to send to REST server
         RequestParams params = new RequestParams();
         // add the query string in from the text
@@ -76,7 +77,7 @@ public class CelsearchReceiver extends BroadcastReceiver {
         // add the number of the phone that sent the text
         params.put("number", number);
         Log.v("TAG", "chris debug: getQueryAnswer 2");
-        //TODO: fill in the address we are sending it to!
+
         CelsearchRestClient.post("http://10.0.2.2:3000/celsearch/123", params, new AsyncHttpResponseHandler() {
             /*@Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -127,6 +128,11 @@ public class CelsearchReceiver extends BroadcastReceiver {
                 String response = "";
                 try {
                     response = new String(responseBody, "UTF-8");
+
+                    // prepare to send result back to the phone
+                    SmsManager smsManager = SmsManager.getDefault();
+                    // send the text message with the result
+                    smsManager.sendTextMessage(phoneNumber, null, response, null, null);
                 } catch (UnsupportedEncodingException e) {
                     response = "error";
                     e.printStackTrace();

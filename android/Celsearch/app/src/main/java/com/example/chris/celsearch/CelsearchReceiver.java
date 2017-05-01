@@ -76,9 +76,9 @@ public class CelsearchReceiver extends BroadcastReceiver {
         params.put("query", query);
         // add the number of the phone that sent the text
         params.put("number", number);
-        Log.v("TAG", "chris debug: getQueryAnswer 2");
+        Log.v("TAG", "chris debug: number is : " + number);
 
-        CelsearchRestClient.post("http://10.0.2.2:3000/celsearch/123", params, new AsyncHttpResponseHandler() {
+        CelsearchRestClient.post("http://10.0.2.2:3000/celsearch/" + number, params, new AsyncHttpResponseHandler() {
             /*@Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 // debugging

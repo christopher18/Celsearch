@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         CelsearchReceiver receiver = new CelsearchReceiver();
         try {
             Log.v("TAG", "chris debug: send query 2");
-            receiver.getQueryAnswer(edit.getText().toString(), "0");
+            receiver.getQueryAnswer(edit.getText().toString(), "app", "wiki");
             Log.v("TAG", "chris debug: send query 3");
             edit.setText("");
         } catch (JSONException e) {

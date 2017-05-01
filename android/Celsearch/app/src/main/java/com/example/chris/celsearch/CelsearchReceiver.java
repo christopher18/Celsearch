@@ -10,9 +10,7 @@ import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -53,7 +51,24 @@ public class CelsearchReceiver extends BroadcastReceiver {
 
                     try {
                         // send query to REST server
-                        getQueryAnswer(query, phoneNumber);
+                        getQueryAnswer(query, phoneNumber, "wiki");
+                    } catch (JSONException e) {
+                        Log.v("TAG", "chris debug: JSON exception occurred");
+                        e.printStackTrace();
+                    }
+                } else if (message.startsWith("@mitsuku")) {
+                    // remove the CS from the beginning of the message
+                    String query = message.substring(9, message.length());
+
+                    // get the phone number of the sender so that we can send the answer back later
+                    String phoneNumber = currentMessage.getDisplayOriginatingAddress();
+
+                    // debugging
+                    Log.v("TAG", "chris debug: " + query);
+
+                    try {
+                        // send query to REST server
+                        getQueryAnswer(query, phoneNumber, "mitsuku");
                     } catch (JSONException e) {
                         Log.v("TAG", "chris debug: JSON exception occurred");
                         e.printStackTrace();
@@ -68,9 +83,9 @@ public class CelsearchReceiver extends BroadcastReceiver {
 
     /**
      * Send to and receive answer from REST server
+     * @param type Will be either 'mitsuku' or 'wiki'
      */
-    public void getQueryAnswer(String query, String number) throws JSONException {
-        final String phoneNumber = number;
+    public void getQueryAnswer(String query, final String number, String type) throws JSONException {
         // create parameters to send to REST server
         RequestParams params = new RequestParams();
         // add the query string in from the text
@@ -79,7 +94,7 @@ public class CelsearchReceiver extends BroadcastReceiver {
         params.put("number", number);
         Log.v("TAG", "chris debug: number is : " + number);
 
-        CelsearchRestClient.post("http://10.0.2.2:3000/celsearch/" + number, params, new AsyncHttpResponseHandler() {
+        CelsearchRestClient.post(type + "/" + number, params, new AsyncHttpResponseHandler() {
             /*@Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 // debugging
@@ -138,7 +153,7 @@ public class CelsearchReceiver extends BroadcastReceiver {
 
                     // send the text message or messages with the result
                     for (String piece : pieces) {
-                        smsManager.sendTextMessage(phoneNumber, null, piece, null, null);
+                        smsManager.sendTextMessage(number, null, piece, null, null);
                     }
                 } catch (UnsupportedEncodingException e) {
                     response = "error";

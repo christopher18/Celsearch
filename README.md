@@ -32,3 +32,5 @@ We think that this is feasible through Android's BroadcastReceiver class.
 - Once you have all the requirements, simply got to the web/celsearch folder and use `npm run start` 
   - This will start the server 
 - You can then go ahead and change the IP address used in the Android app in this [line](https://github.com/christopher18/Celsearch/blob/master/android/Celsearch/app/src/main/java/com/example/chris/celsearch/CelsearchReceiver.java#L81)
+- Also make sure you have mongo running 
+  - Use `mongod`; you might have to use `sudo mongod` if on a Linux machine

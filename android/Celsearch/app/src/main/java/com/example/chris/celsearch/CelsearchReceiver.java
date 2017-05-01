@@ -15,6 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -131,8 +132,14 @@ public class CelsearchReceiver extends BroadcastReceiver {
 
                     // prepare to send result back to the phone
                     SmsManager smsManager = SmsManager.getDefault();
-                    // send the text message with the result
-                    smsManager.sendTextMessage(phoneNumber, null, response, null, null);
+
+                    // Divide the response into pieces small enough to be send via SMS
+                    ArrayList<String> pieces = smsManager.divideMessage(response);
+
+                    // send the text message or messages with the result
+                    for (String piece : pieces) {
+                        smsManager.sendTextMessage(phoneNumber, null, piece, null, null);
+                    }
                 } catch (UnsupportedEncodingException e) {
                     response = "error";
                     e.printStackTrace();

@@ -51,7 +51,7 @@ public class CelsearchReceiver extends BroadcastReceiver {
 
                     try {
                         // send query to REST server
-                        getQueryAnswer(query, phoneNumber, "wiki");
+                        getQueryAnswer(query, phoneNumber, "wikipedia");
                     } catch (JSONException e) {
                         Log.v("TAG", "chris debug: JSON exception occurred");
                         e.printStackTrace();
@@ -154,6 +154,11 @@ public class CelsearchReceiver extends BroadcastReceiver {
                     // send the text message or messages with the result
                     for (String piece : pieces) {
                         smsManager.sendTextMessage(number, null, piece, null, null);
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                 } catch (UnsupportedEncodingException e) {
                     response = "error";

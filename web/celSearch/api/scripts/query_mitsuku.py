@@ -7,7 +7,7 @@ import requests
 from bs4 import BeautifulSoup
 
 # URL for the chatbot
-URL = "https://kakko.pandorabots.com/pandora/talk?botid=f326d0be8e345a13&skin=chat"
+URL = "https://kakko.pandorabots.com/pandora/talk?botid=f6a012073e345a08&skin=chat"
 
 # Regex pattern to get the appropriate data 
 PATTERN = re.compile("</b>((.|\n)*?)<br>")

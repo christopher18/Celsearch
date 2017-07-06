@@ -4,7 +4,11 @@
 import sys
 import re
 import requests
+from cachecontrol import CacheControl
 from bs4 import BeautifulSoup
+
+session = requests.session()
+cached_session = CacheControl(session)
 
 # URL for the chatbot
 URL = "https://kakko.pandorabots.com/pandora/talk?botid=f6a012073e345a08&skin=chat"
@@ -17,10 +21,10 @@ def ask_mitsuku(message):
 	payload = {
 		'message': message
 	}
-	session = requests.session()
+	
 
 	# Make POST request 
-	r = requests.post(URL, data=payload)
+	r = cached_session.post(URL, data=payload)
 
 	# Parse data for Mitsuku's response
 	soup = BeautifulSoup(r.content, 'html.parser')

@@ -47,15 +47,11 @@ public class MainActivity extends AppCompatActivity {
      * @param view the button that triggered this method
      */
     public void sendQuery(View view) {
-        Log.v("TAG", "chris debug: send query 1");
         CelsearchReceiver receiver = new CelsearchReceiver();
         try {
-            Log.v("TAG", "chris debug: send query 2");
             receiver.getQueryAnswer(edit.getText().toString(), "app", "wiki");
-            Log.v("TAG", "chris debug: send query 3");
             edit.setText("");
         } catch (JSONException e) {
-            Log.v("TAG", "chris debug: JSON exception");
             e.printStackTrace();
         }
     }

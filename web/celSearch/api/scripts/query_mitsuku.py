@@ -22,7 +22,6 @@ def ask_mitsuku(message):
 		'message': message
 	}
 	
-
 	# Make POST request 
 	r = cached_session.post(URL, data=payload)
 

@@ -63,9 +63,6 @@ public class CelsearchReceiver extends BroadcastReceiver {
                     // get the phone number of the sender so that we can send the answer back later
                     String phoneNumber = currentMessage.getDisplayOriginatingAddress();
 
-                    // debugging
-                    Log.v("TAG", "chris debug: " + query);
-
                     try {
                         // send query to REST server
                         getQueryAnswer(query, phoneNumber, "mitsuku");
@@ -92,28 +89,14 @@ public class CelsearchReceiver extends BroadcastReceiver {
         params.put("query", query);
         // add the number of the phone that sent the text
         params.put("number", number);
-        Log.v("TAG", "chris debug: number is : " + number);
 
         CelsearchRestClient.post(type + "/" + number, params, new AsyncHttpResponseHandler() {
-            /*@Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                // debugging
-                Log.v("TAG", "chris debug: onSuccess 1");
-                Log.v("TAG", "chris debug: JSONObject: " + response.toString());
-            }*/
-
-            /*@Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray timeline) {
-                // debugging
-                Log.v("TAG", "chris debug: JSONArray ");
-            }*/
+            
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable
                     error)
             {
-                // Response failed :(
-                Log.v("TAG", "chris debug: onFailure ");
-                Log.v("TAG", "?");
+                // Response failed
                 if (headers == null) {
                     Log.v("TAG", "IF");
                 } else {
@@ -125,7 +108,6 @@ public class CelsearchReceiver extends BroadcastReceiver {
                     Log.v("TAG", "chris debug: onFailure: " + header.getName());
                 }
                 String response = "";
-                Log.v("TAG", "chris debug: onFailure: again" );
                 try {
                     Log.v("TAG", "chris debug: before responsebody conversion");
                     response = new String(responseBody, "UTF-8");
@@ -135,7 +117,6 @@ public class CelsearchReceiver extends BroadcastReceiver {
                     response = "error";
                     e.printStackTrace();
                 }
-                Log.v("TAG", "chris debug: onFailure: " + response);
             }
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -164,32 +145,31 @@ public class CelsearchReceiver extends BroadcastReceiver {
                     response = "error";
                     e.printStackTrace();
                 }
-                Log.v("TAG", "chris debug: JSONObject: " + response);
             }
 
             @Override
             public void onStart() {
                 // Initiated the request
-                Log.v("TAG", "chris debug: onStart ");
+                Log.v("TAG", "debug: onStart ");
             }
 
 
             @Override
             public void onRetry(int retryNo) {
                 // Request was retried
-                Log.v("TAG", "chris debug: onRetry ");
+                Log.v("TAG", "onRetry ");
             }
 
             @Override
             public void onProgress(long bytesWritten, long totalSize) {
                 // Progress notification
-                Log.v("TAG", "chris debug: onProgress");
+                Log.v("TAG", "onProgress");
             }
 
             @Override
             public void onFinish() {
                 // Completed the request (either success or failure)
-                Log.v("TAG", "chris debug: onFinish");
+                Log.v("TAG", "onFinish");
             }
         });
     }
